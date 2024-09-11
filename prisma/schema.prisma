@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,4 +5,25 @@ generator client {
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+model Continent {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  countries Country[] 
+}
+
+model Country {
+  id          Int         @id @default(autoincrement())
+  name        String
+  code        String      @unique
+  continent   Continent   @relation(fields: [continentId], references: [id])
+  continentId Int 
+  capital     CapitalCity?
+}
+model CapitalCity {
+  id        Int     @id @default(autoincrement())
+  name      String
+  country   Country @relation(fields: [countryId], references: [id])
+  countryId Int     @unique 
 }
